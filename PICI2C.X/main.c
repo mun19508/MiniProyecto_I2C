@@ -41,10 +41,28 @@ uint16_t Pz; //recupera los valores de la posicion.
 uint16_t temperature; //recupera el valor de la temperatura
 //******************************************************************************
 //***************************Código de Interrupción***************************** 
+
 void __interrupt() isr(void) {
-//aqui va la interrupcion del UART, agregar en el SP32 alguna señal de inicio
-    if(PIR1bits.RCIF){
+    //En la interrupcion existe una relacion entre la posicion de la letra y los 
+    //LEDS que enciende 
+    if (PIR1bits.RCIF) {
         char rcUART = UARTReadChar();
+        if (rcUART == 'A') {//La 'A' corresponde a ambos LEDS en 0, o el puerto entero en 0 
+            PORTAbits.RA0 = 0;
+            PORTAbits.RA1 = 0;
+        }
+        if (rcUART == 'B') {//La 'B' corresponde a que el puerto tenga un valor de 1 
+            PORTAbits.RA0 = 1;
+            PORTAbits.RA1 = 0;
+        }
+        if (rcUART == 'C') {//La 'C' corresponde a que el puerto tenga un valor de 2 
+            PORTAbits.RA0 = 0;
+            PORTAbits.RA1 = 1;
+        }
+        if (rcUART == 'D') {//La 'D' corresponde a que el puerto tenga un valor de 23
+            PORTAbits.RA0 = 1;
+            PORTAbits.RA1 = 1;
+        }
     }
 }
 //******************************************************************************
@@ -60,15 +78,15 @@ void main(void) {
     TRISCbits.TRISC6 = 0; //se habilita como salida el TX
     TRISCbits.TRISC7 = 1; //se habilita como entrada el RX
     //--------------------------Comunicacion SPI--------------------------------
-    
+
     //--------------------------Puerto Entrada/salida---------------------------
     TRISAbits.TRISA0 = 0;
-    TRISAbits.TRISA1 = 0;//ambos se habilitan para las luces piloto
+    TRISAbits.TRISA1 = 0; //ambos se habilitan para las luces piloto
     //-------------------------------Limpieza de puertos------------------------   
     PORTAbits.RA0 = 0;
     PORTAbits.RA1 = 0; //Se limpian los puertos
     //--------------------------Loop principal----------------------------------
-    while(1){
-    
+    while (1) {
+    UARTSendString(, 6);
     }
 }

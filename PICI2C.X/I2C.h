@@ -25,7 +25,7 @@
 //*****************************************************************************
 // Función para inicializar I2C Maestro
 //*****************************************************************************
-void I2C_Master_Init(const unsigned long c);
+void I2C_Master_Init();
 //*****************************************************************************
 // Función de espera: mientras se esté iniciada una comunicación,
 // esté habilitado una recepción, esté habilitado una parada

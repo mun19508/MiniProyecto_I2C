@@ -13,6 +13,11 @@
 //******************************Definiciones************************************
 #define _XTAL_FREQ 4000000
 #define PilotoLEDs PORTA
+#define Sample_Rate_Divider 0x19
+#define CONFIG_MPU6050 0x1A
+#define Gyro_CONFIG 0x1B
+#define Accel_CONFIG 0x1C
+#define Power_Managment_1 0x6B
 //talves defina el inicio de las direcciones.
 //y el inicio de la comunicacion UART.
 //******************************************************************************
@@ -48,22 +53,23 @@ void __interrupt() isr(void) {
         char opcionUART = RCREG;
         switch (opcionUART) {
 //---------------------------Cambios en el PIC----------------------------------            
-            case 'A': //Coloca ambos LEDs en 0
+            case 'a': //Coloca ambos LEDs en 0
                 PilotoLEDs = 0;
                 break;
-            case 'B': //Coloca el LED en el pin RA0 en 1 y el pin RA1 en 0  
+            case 'b': //Coloca el LED en el pin RA0 en 1 y el pin RA1 en 0  
                 PilotoLEDs = 1;
                 break;
-            case 'C': //Coloca ambos LED pin RA1 en 1 y el pin RA0 en 0
+            case 'c': //Coloca ambos LED pin RA1 en 1 y el pin RA0 en 0
                 PilotoLEDs = 2;
                 break;
-            case 'D': //Coloca ambos LEDs en 1
+            case 'd': //Coloca ambos LEDs en 1
                 PilotoLEDs = 3;
                 break;
 //---------------------------Cambios en Adafruit IO-----------------------------                
-            case 'X': //envia el valor actual de la pos. en el eje x
-                UARTSendString(charEjex,5);
+            case 'x': //envia el valor actual de la pos. en el eje x
+                UARTSendChar('s');
                 break;
+                
         }
     }
 }
@@ -81,12 +87,42 @@ void main(void) {
     TRISCbits.TRISC7 = 1; //se habilita como entrada el RX   
     //--------------------------Puerto Entrada/salida---------------------------
     TRISAbits.TRISA0 = 0;
-    TRISAbits.TRISA1 = 0; //ambos se habilitan para las luces piloto
+    TRISAbits.TRISA1 = 0; //Ambos pines de las luces piloto se habilitan  
     //-------------------------------Limpieza de puertos------------------------   
     PORTAbits.RA0 = 0;
     PORTAbits.RA1 = 0; //Se limpian los puertos
     //--------------------------Comunicacion SPI--------------------------------
     I2C_Master_Init();
+    //Config de la frecuencia de los datos
+    I2C_Master_Start();
+    I2C_Master_Write(0xD0);//Direccion de escritura
+    I2C_Master_Write(Sample_Rate_Divider); //Es el para el registro con direccion 0x19
+    I2C_Master_Write(0x07); //Es el para que los datos tengan una frecuencia de 1KHz
+    I2C_Master_Stop();
+    //Config del modo de energia y reloj 
+    I2C_Master_Start();
+    I2C_Master_Write(0xD0);//Direccion de escritura
+    I2C_Master_Write(Power_Managment_1); //Es el para el registro con direccion 0x1A
+    I2C_Master_Write(0x01); //PLL ref en el eje x
+    I2C_Master_Stop();
+    //Config general 
+    I2C_Master_Start();
+    I2C_Master_Write(0xD0);//Direccion de escritura
+    I2C_Master_Write(CONFIG_MPU6050); //Es el para el registro con direccion 0x1A
+    I2C_Master_Write(0x00); //Input desactivada, maxima ancho de banda para el accel
+    I2C_Master_Stop();
+    //Config del giroscopio
+    I2C_Master_Start();
+    I2C_Master_Write(0xD0);//Direccion de escritura
+    I2C_Master_Write(Gyro_CONFIG); //Es el para el registro con direccion 0x1B
+    I2C_Master_Write(0x00); //Sin pruebas, +-250°/s  
+    I2C_Master_Stop();
+    //Config del acelerometro
+    I2C_Master_Start();
+    I2C_Master_Write(0xD0);//Direccion de escritura
+    I2C_Master_Write(Accel_CONFIG); //Es el para el registro con direccion 0x1C
+    I2C_Master_Write(0x00); //Sin pruebas y escala de +-2g
+    I2C_Master_Stop();
     //--------------------------Loop principal----------------------------------
     while (1) {
 

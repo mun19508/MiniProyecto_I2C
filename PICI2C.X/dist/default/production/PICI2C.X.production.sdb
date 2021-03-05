@@ -13,31 +13,35 @@
 [v ___eecpymem __eecpymem `(v  1 e 1 0 ]
 "39
 [v ___memcpyee __memcpyee `(v  1 e 1 0 ]
-"32 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\I2C.c
+"16 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\I2C.c
+[v _I2C_Master_Init I2C_Master_Init `(v  1 e 1 0 ]
+"32
 [v _I2C_Master_Wait I2C_Master_Wait `(v  1 e 1 0 ]
+"39
+[v _I2C_Master_Start I2C_Master_Start `(v  1 e 1 0 ]
+"61
+[v _I2C_Master_Stop I2C_Master_Stop `(v  1 e 1 0 ]
 "71
 [v _I2C_Master_Write I2C_Master_Write `(v  1 e 1 0 ]
 "113
 [v _I2C_ACK I2C_ACK `(v  1 e 1 0 ]
 "119
 [v _I2C_NACK I2C_NACK `(v  1 e 1 0 ]
-"45 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\main.c
+"51 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\main.c
 [v _isr isr `II(v  1 e 1 0 ]
-"69
+"77
 [v _main main `(v  1 e 1 0 ]
 "13 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\UART.c
 [v _UARTInit UARTInit `(v  1 e 1 0 ]
 "44
 [v _UARTSendChar UARTSendChar `(v  1 e 1 0 ]
-"54
-[v _UARTSendString UARTSendString `(v  1 e 1 0 ]
 "65
 [v _UARTDataReady UARTDataReady `(uc  1 e 1 0 ]
 "73
 [v _UARTReadChar UARTReadChar `(uc  1 e 1 0 ]
-"167 C:\Program Files\Microchip\xc8\v2.31\pic\include\proc\pic16f887.h
+"166 C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h
 [v _PORTA PORTA `VEuc  1 e 1 @5 ]
-[s S45 . 1 `uc 1 RA0 1 0 :1:0 
+[s S149 . 1 `uc 1 RA0 1 0 :1:0 
 `uc 1 RA1 1 0 :1:1 
 `uc 1 RA2 1 0 :1:2 
 `uc 1 RA3 1 0 :1:3 
@@ -46,10 +50,10 @@
 `uc 1 RA6 1 0 :1:6 
 `uc 1 RA7 1 0 :1:7 
 ]
-"184
-[u S54 . 1 `S45 1 . 1 0 ]
-[v _PORTAbits PORTAbits `VES54  1 e 1 @5 ]
-[s S74 . 1 `uc 1 RBIF 1 0 :1:0 
+"183
+[u S158 . 1 `S149 1 . 1 0 ]
+[v _PORTAbits PORTAbits `VES158  1 e 1 @5 ]
+[s S56 . 1 `uc 1 RBIF 1 0 :1:0 
 `uc 1 INTF 1 0 :1:1 
 `uc 1 T0IF 1 0 :1:2 
 `uc 1 RBIE 1 0 :1:3 
@@ -58,14 +62,14 @@
 `uc 1 PEIE 1 0 :1:6 
 `uc 1 GIE 1 0 :1:7 
 ]
-"483
-[s S83 . 1 `uc 1 . 1 0 :2:0 
+"482
+[s S65 . 1 `uc 1 . 1 0 :2:0 
 `uc 1 TMR0IF 1 0 :1:2 
 `uc 1 . 1 0 :2:3 
 `uc 1 TMR0IE 1 0 :1:5 
 ]
-[u S88 . 1 `S74 1 . 1 0 `S83 1 . 1 0 ]
-[v _INTCONbits INTCONbits `VES88  1 e 1 @11 ]
+[u S70 . 1 `S56 1 . 1 0 `S65 1 . 1 0 ]
+[v _INTCONbits INTCONbits `VES70  1 e 1 @11 ]
 [s S22 . 1 `uc 1 TMR1IF 1 0 :1:0 
 `uc 1 TMR2IF 1 0 :1:1 
 `uc 1 CCP1IF 1 0 :1:2 
@@ -74,14 +78,14 @@
 `uc 1 RCIF 1 0 :1:5 
 `uc 1 ADIF 1 0 :1:6 
 ]
-"554
+"553
 [u S30 . 1 `S22 1 . 1 0 ]
 [v _PIR1bits PIR1bits `VES30  1 e 1 @12 ]
-"844
+"843
 [v _SSPBUF SSPBUF `VEuc  1 e 1 @19 ]
-"851
+"850
 [v _SSPCON SSPCON `VEuc  1 e 1 @20 ]
-[s S369 . 1 `uc 1 RX9D 1 0 :1:0 
+[s S371 . 1 `uc 1 RX9D 1 0 :1:0 
 `uc 1 OERR 1 0 :1:1 
 `uc 1 FERR 1 0 :1:2 
 `uc 1 ADDEN 1 0 :1:3 
@@ -90,24 +94,24 @@
 `uc 1 RX9 1 0 :1:6 
 `uc 1 SPEN 1 0 :1:7 
 ]
-"1069
-[s S378 . 1 `uc 1 RCD8 1 0 :1:0 
+"1068
+[s S380 . 1 `uc 1 RCD8 1 0 :1:0 
 `uc 1 . 1 0 :5:1 
 `uc 1 RC9 1 0 :1:6 
 ]
-[s S382 . 1 `uc 1 . 1 0 :6:0 
+[s S384 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 nRC8 1 0 :1:6 
 ]
-[s S385 . 1 `uc 1 . 1 0 :6:0 
+[s S387 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 RC8_9 1 0 :1:6 
 ]
-[u S388 . 1 `S369 1 . 1 0 `S378 1 . 1 0 `S382 1 . 1 0 `S385 1 . 1 0 ]
-[v _RCSTAbits RCSTAbits `VES388  1 e 1 @24 ]
-"1134
+[u S390 . 1 `S371 1 . 1 0 `S380 1 . 1 0 `S384 1 . 1 0 `S387 1 . 1 0 ]
+[v _RCSTAbits RCSTAbits `VES390  1 e 1 @24 ]
+"1133
 [v _TXREG TXREG `VEuc  1 e 1 @25 ]
-"1141
+"1140
 [v _RCREG RCREG `VEuc  1 e 1 @26 ]
-[s S146 . 1 `uc 1 TRISA0 1 0 :1:0 
+[s S128 . 1 `uc 1 TRISA0 1 0 :1:0 
 `uc 1 TRISA1 1 0 :1:1 
 `uc 1 TRISA2 1 0 :1:2 
 `uc 1 TRISA3 1 0 :1:3 
@@ -116,10 +120,10 @@
 `uc 1 TRISA6 1 0 :1:6 
 `uc 1 TRISA7 1 0 :1:7 
 ]
-"1434
-[u S155 . 1 `S146 1 . 1 0 ]
-[v _TRISAbits TRISAbits `VES155  1 e 1 @133 ]
-[s S125 . 1 `uc 1 TRISC0 1 0 :1:0 
+"1433
+[u S137 . 1 `S128 1 . 1 0 ]
+[v _TRISAbits TRISAbits `VES137  1 e 1 @133 ]
+[s S107 . 1 `uc 1 TRISC0 1 0 :1:0 
 `uc 1 TRISC1 1 0 :1:1 
 `uc 1 TRISC2 1 0 :1:2 
 `uc 1 TRISC3 1 0 :1:3 
@@ -128,10 +132,10 @@
 `uc 1 TRISC6 1 0 :1:6 
 `uc 1 TRISC7 1 0 :1:7 
 ]
-"1558
-[u S134 . 1 `S125 1 . 1 0 ]
-[v _TRISCbits TRISCbits `VES134  1 e 1 @135 ]
-[s S106 . 1 `uc 1 TMR1IE 1 0 :1:0 
+"1557
+[u S116 . 1 `S107 1 . 1 0 ]
+[v _TRISCbits TRISCbits `VES116  1 e 1 @135 ]
+[s S88 . 1 `uc 1 TMR1IE 1 0 :1:0 
 `uc 1 TMR2IE 1 0 :1:1 
 `uc 1 CCP1IE 1 0 :1:2 
 `uc 1 SSPIE 1 0 :1:3 
@@ -139,12 +143,12 @@
 `uc 1 RCIE 1 0 :1:5 
 `uc 1 ADIE 1 0 :1:6 
 ]
-"1719
-[u S114 . 1 `S106 1 . 1 0 ]
-[v _PIE1bits PIE1bits `VES114  1 e 1 @140 ]
-"1980
+"1718
+[u S96 . 1 `S88 1 . 1 0 ]
+[v _PIE1bits PIE1bits `VES96  1 e 1 @140 ]
+"1979
 [v _SSPCON2 SSPCON2 `VEuc  1 e 1 @145 ]
-[s S261 . 1 `uc 1 SEN 1 0 :1:0 
+[s S268 . 1 `uc 1 SEN 1 0 :1:0 
 `uc 1 RSEN 1 0 :1:1 
 `uc 1 PEN 1 0 :1:2 
 `uc 1 RCEN 1 0 :1:3 
@@ -153,14 +157,14 @@
 `uc 1 ACKSTAT 1 0 :1:6 
 `uc 1 GCEN 1 0 :1:7 
 ]
-"1997
-[u S270 . 1 `S261 1 . 1 0 ]
-[v _SSPCON2bits SSPCON2bits `VES270  1 e 1 @145 ]
-"2049
+"1996
+[u S277 . 1 `S268 1 . 1 0 ]
+[v _SSPCON2bits SSPCON2bits `VES277  1 e 1 @145 ]
+"2048
 [v _SSPADD SSPADD `VEuc  1 e 1 @147 ]
-"2178
+"2177
 [v _SSPSTAT SSPSTAT `VEuc  1 e 1 @148 ]
-[s S332 . 1 `uc 1 TX9D 1 0 :1:0 
+[s S334 . 1 `uc 1 TX9D 1 0 :1:0 
 `uc 1 TRMT 1 0 :1:1 
 `uc 1 BRGH 1 0 :1:2 
 `uc 1 SENDB 1 0 :1:3 
@@ -169,72 +173,50 @@
 `uc 1 TX9 1 0 :1:6 
 `uc 1 CSRC 1 0 :1:7 
 ]
-"2583
-[s S341 . 1 `uc 1 TXD8 1 0 :1:0 
+"2582
+[s S343 . 1 `uc 1 TXD8 1 0 :1:0 
 `uc 1 . 1 0 :5:1 
 `uc 1 nTX8 1 0 :1:6 
 ]
-[s S345 . 1 `uc 1 . 1 0 :6:0 
+[s S347 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 TX8_9 1 0 :1:6 
 ]
-[u S348 . 1 `S332 1 . 1 0 `S341 1 . 1 0 `S345 1 . 1 0 ]
-[v _TXSTAbits TXSTAbits `VES348  1 e 1 @152 ]
-"2643
+[u S350 . 1 `S334 1 . 1 0 `S343 1 . 1 0 `S347 1 . 1 0 ]
+[v _TXSTAbits TXSTAbits `VES350  1 e 1 @152 ]
+"2642
 [v _SPBRG SPBRG `VEuc  1 e 1 @153 ]
-"3388
+"3387
 [v _ANSEL ANSEL `VEuc  1 e 1 @392 ]
-"3450
+"3449
 [v _ANSELH ANSELH `VEuc  1 e 1 @393 ]
-"3564
+"3563
 [v _ACKDT ACKDT `VEb  1 e 0 @1165 ]
-"3567
+"3566
 [v _ACKEN ACKEN `VEb  1 e 0 @1164 ]
-"3642
+"3641
 [v _BF BF `VEb  1 e 0 @1184 ]
-"3897
+"3896
 [v _GIE GIE `VEb  1 e 0 @95 ]
-"4041
+"4040
 [v _PEIE PEIE `VEb  1 e 0 @94 ]
-"4167
+"4166
 [v _RCEN RCEN `VEb  1 e 0 @1163 ]
-"4251
+"4250
 [v _SEN SEN `VEb  1 e 0 @1160 ]
-"4275
+"4274
 [v _SSPIE SSPIE `VEb  1 e 0 @1123 ]
-"4278
+"4277
 [v _SSPIF SSPIF `VEb  1 e 0 @99 ]
-"4458
+"4457
 [v _TRISC3 TRISC3 `VEb  1 e 0 @1083 ]
-"4461
+"4460
 [v _TRISC4 TRISC4 `VEb  1 e 0 @1084 ]
-"69 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\main.c
+"77 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\main.c
 [v _main main `(v  1 e 1 0 ]
 {
-"88
-[v main@count count `i  1 a 2 24 ]
-"101
+"130
 } 0
-"54 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\UART.c
-[v _UARTSendString UARTSendString `(v  1 e 1 0 ]
-{
-[v UARTSendString@str str `*.24DCuc  1 a 1 wreg ]
-"55
-[v UARTSendString@i i `i  1 a 2 4 ]
-"54
-[v UARTSendString@str str `*.24DCuc  1 a 1 wreg ]
-[v UARTSendString@max_length max_length `DCuc  1 p 1 1 ]
-[v UARTSendString@str str `*.24DCuc  1 a 1 3 ]
-"59
-} 0
-"44
-[v _UARTSendChar UARTSendChar `(v  1 e 1 0 ]
-{
-[v UARTSendChar@c c `DCuc  1 a 1 wreg ]
-[v UARTSendChar@c c `DCuc  1 a 1 wreg ]
-[v UARTSendChar@c c `DCuc  1 a 1 0 ]
-"47
-} 0
-"13
+"13 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\UART.c
 [v _UARTInit UARTInit `(v  1 e 1 0 ]
 {
 [v UARTInit@baud_rate baud_rate `DCul  1 p 4 14 ]
@@ -253,20 +235,44 @@
 [v ___lldiv@dividend dividend `ul  1 p 4 4 ]
 "30
 } 0
-"45 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\main.c
+"71 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\I2C.c
+[v _I2C_Master_Write I2C_Master_Write `(v  1 e 1 0 ]
+{
+[v I2C_Master_Write@d d `ui  1 p 2 0 ]
+"75
+} 0
+"61
+[v _I2C_Master_Stop I2C_Master_Stop `(v  1 e 1 0 ]
+{
+"65
+} 0
+"39
+[v _I2C_Master_Start I2C_Master_Start `(v  1 e 1 0 ]
+{
+"43
+} 0
+"32
+[v _I2C_Master_Wait I2C_Master_Wait `(v  1 e 1 0 ]
+{
+"35
+} 0
+"16
+[v _I2C_Master_Init I2C_Master_Init `(v  1 e 1 0 ]
+{
+"24
+} 0
+"51 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\main.c
 [v _isr isr `II(v  1 e 1 0 ]
 {
-"49
-[v isr@rcUART rcUART `uc  1 a 1 4 ]
-"67
+"53
+[v isr@opcionUART opcionUART `uc  1 a 1 6 ]
+"75
 } 0
-"73 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\UART.c
-[v _UARTReadChar UARTReadChar `(uc  1 e 1 0 ]
+"44 C:\Users\Daniel\Documents\GitHub\MiniProyecto_I2C\PICI2C.X\UART.c
+[v _UARTSendChar UARTSendChar `(v  1 e 1 0 ]
 {
-"76
-} 0
-"65
-[v _UARTDataReady UARTDataReady `(uc  1 e 1 0 ]
-{
-"67
+[v UARTSendChar@c c `DCuc  1 a 1 wreg ]
+[v UARTSendChar@c c `DCuc  1 a 1 wreg ]
+[v UARTSendChar@c c `DCuc  1 a 1 0 ]
+"47
 } 0

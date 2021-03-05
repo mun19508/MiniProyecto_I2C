@@ -12,6 +12,7 @@
 //******************************************************************************
 //******************************Definiciones************************************
 #define _XTAL_FREQ 4000000
+#define PilotoLEDs PORTA
 //talves defina el inicio de las direcciones.
 //y el inicio de la comunicacion UART.
 //******************************************************************************
@@ -39,29 +40,30 @@ uint16_t Px;
 uint16_t Py;
 uint16_t Pz; //recupera los valores de la posicion.
 uint16_t temperature; //recupera el valor de la temperatura
+char* charEjex;
 //******************************************************************************
 //***************************Código de Interrupción***************************** 
-
 void __interrupt() isr(void) {
-    //En la interrupcion existe una relacion entre la posicion de la letra y los 
-    //LEDS que enciende 
     if (PIR1bits.RCIF) {
-        char rcUART = UARTReadChar();
-        if (rcUART == 'A') {//La 'A' corresponde a ambos LEDS en 0, o el puerto entero en 0 
-            PORTAbits.RA0 = 0;
-            PORTAbits.RA1 = 0;
-        }
-        if (rcUART == 'B') {//La 'B' corresponde a que el puerto tenga un valor de 1 
-            PORTAbits.RA0 = 1;
-            PORTAbits.RA1 = 0;
-        }
-        if (rcUART == 'C') {//La 'C' corresponde a que el puerto tenga un valor de 2 
-            PORTAbits.RA0 = 0;
-            PORTAbits.RA1 = 1;
-        }
-        if (rcUART == 'D') {//La 'D' corresponde a que el puerto tenga un valor de 23
-            PORTAbits.RA0 = 1;
-            PORTAbits.RA1 = 1;
+        char opcionUART = RCREG;
+        switch (opcionUART) {
+//---------------------------Cambios en el PIC----------------------------------            
+            case 'A': //Coloca ambos LEDs en 0
+                PilotoLEDs = 0;
+                break;
+            case 'B': //Coloca el LED en el pin RA0 en 1 y el pin RA1 en 0  
+                PilotoLEDs = 1;
+                break;
+            case 'C': //Coloca ambos LED pin RA1 en 1 y el pin RA0 en 0
+                PilotoLEDs = 2;
+                break;
+            case 'D': //Coloca ambos LEDs en 1
+                PilotoLEDs = 3;
+                break;
+//---------------------------Cambios en Adafruit IO-----------------------------                
+            case 'X': //envia el valor actual de la pos. en el eje x
+                UARTSendString(charEjex,5);
+                break;
         }
     }
 }
@@ -76,17 +78,17 @@ void main(void) {
     INTCONbits.PEIE = 1;
     PIE1bits.RCIE = 1;
     TRISCbits.TRISC6 = 0; //se habilita como salida el TX
-    TRISCbits.TRISC7 = 1; //se habilita como entrada el RX
-    //--------------------------Comunicacion SPI--------------------------------
-
+    TRISCbits.TRISC7 = 1; //se habilita como entrada el RX   
     //--------------------------Puerto Entrada/salida---------------------------
     TRISAbits.TRISA0 = 0;
     TRISAbits.TRISA1 = 0; //ambos se habilitan para las luces piloto
     //-------------------------------Limpieza de puertos------------------------   
     PORTAbits.RA0 = 0;
     PORTAbits.RA1 = 0; //Se limpian los puertos
+    //--------------------------Comunicacion SPI--------------------------------
+    I2C_Master_Init();
     //--------------------------Loop principal----------------------------------
     while (1) {
-    UARTSendString(, 6);
+
     }
 }

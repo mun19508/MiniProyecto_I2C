@@ -306,220 +306,220 @@ Version 4.0 HI-TECH Software Intermediate Code
 "3546
 [; ;C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h: 3546: __asm("EECON2 equ 018Dh");
 [; <" EECON2 equ 018Dh ;# ">
-"13 UART.c
-[; ;UART.c: 13: void UARTInit(const uint32_t baud_rate, const uint8_t BRGH) {
+"14 UART.c
+[; ;UART.c: 14: void UARTInit(const uint32_t baud_rate, const uint8_t BRGH) {
 [v _UARTInit `(v ~T0 @X0 1 ef2`Cul`Cuc ]
 {
 [e :U _UARTInit ]
 [v _baud_rate `Cul ~T0 @X0 1 r1 ]
 [v _BRGH `Cuc ~T0 @X0 1 r2 ]
 [f ]
-"15
-[; ;UART.c: 15:     if (BRGH == 0) {
+"16
+[; ;UART.c: 16:     if (BRGH == 0) {
 [e $ ! == -> _BRGH `i -> 0 `i 139  ]
 {
-"16
-[; ;UART.c: 16:         SPBRG = 4000000 / (64 * baud_rate) - 1;
-[e = _SPBRG -> - / -> -> 4000000 `l `ul * -> -> -> 64 `i `l `ul _baud_rate -> -> -> 1 `i `l `ul `uc ]
 "17
-[; ;UART.c: 17:         TXSTAbits.BRGH = 0;
-[e = . . _TXSTAbits 0 2 -> -> 0 `i `uc ]
+[; ;UART.c: 17:         SPBRG = 4000000/(64*baud_rate) - 1;
+[e = _SPBRG -> - / -> -> 4000000 `l `ul * -> -> -> 64 `i `l `ul _baud_rate -> -> -> 1 `i `l `ul `uc ]
 "18
-[; ;UART.c: 18:     } else {
+[; ;UART.c: 18:         TXSTAbits.BRGH = 0;
+[e = . . _TXSTAbits 0 2 -> -> 0 `i `uc ]
+"19
+[; ;UART.c: 19:     } else {
 }
 [e $U 140  ]
 [e :U 139 ]
 {
-"19
-[; ;UART.c: 19:         SPBRG = 4000000 / (16 * baud_rate) - 1;
-[e = _SPBRG -> - / -> -> 4000000 `l `ul * -> -> -> 16 `i `l `ul _baud_rate -> -> -> 1 `i `l `ul `uc ]
 "20
-[; ;UART.c: 20:         TXSTAbits.BRGH = 1;
-[e = . . _TXSTAbits 0 2 -> -> 1 `i `uc ]
+[; ;UART.c: 20:         SPBRG = 4000000/(16*baud_rate) - 1;
+[e = _SPBRG -> - / -> -> 4000000 `l `ul * -> -> -> 16 `i `l `ul _baud_rate -> -> -> 1 `i `l `ul `uc ]
 "21
-[; ;UART.c: 21:     }
+[; ;UART.c: 21:         TXSTAbits.BRGH = 1;
+[e = . . _TXSTAbits 0 2 -> -> 1 `i `uc ]
+"22
+[; ;UART.c: 22:     }
 }
 [e :U 140 ]
-"24
-[; ;UART.c: 24:     TXSTAbits.TX9 = 0;
-[e = . . _TXSTAbits 0 6 -> -> 0 `i `uc ]
 "25
-[; ;UART.c: 25:     TXSTAbits.TXEN = 1;
-[e = . . _TXSTAbits 0 5 -> -> 1 `i `uc ]
+[; ;UART.c: 25:     TXSTAbits.TX9 = 0;
+[e = . . _TXSTAbits 0 6 -> -> 0 `i `uc ]
 "26
-[; ;UART.c: 26:     TXSTAbits.SYNC = 0;
+[; ;UART.c: 26:     TXSTAbits.TXEN = 1;
+[e = . . _TXSTAbits 0 5 -> -> 1 `i `uc ]
+"27
+[; ;UART.c: 27:     TXSTAbits.SYNC = 0;
 [e = . . _TXSTAbits 0 4 -> -> 0 `i `uc ]
-"29
-[; ;UART.c: 29:     RCSTAbits.SPEN = 1;
-[e = . . _RCSTAbits 0 7 -> -> 1 `i `uc ]
 "30
-[; ;UART.c: 30:     RCSTAbits.RX9 = 0;
-[e = . . _RCSTAbits 0 6 -> -> 0 `i `uc ]
+[; ;UART.c: 30:     RCSTAbits.SPEN = 1;
+[e = . . _RCSTAbits 0 7 -> -> 1 `i `uc ]
 "31
-[; ;UART.c: 31:     RCSTAbits.CREN = 1;
-[e = . . _RCSTAbits 0 4 -> -> 1 `i `uc ]
+[; ;UART.c: 31:     RCSTAbits.RX9 = 0;
+[e = . . _RCSTAbits 0 6 -> -> 0 `i `uc ]
 "32
-[; ;UART.c: 32:     RCSTAbits.FERR = 0;
-[e = . . _RCSTAbits 0 2 -> -> 0 `i `uc ]
+[; ;UART.c: 32:     RCSTAbits.CREN = 1;
+[e = . . _RCSTAbits 0 4 -> -> 1 `i `uc ]
 "33
-[; ;UART.c: 33:     RCSTAbits.OERR = 0;
+[; ;UART.c: 33:     RCSTAbits.FERR = 0;
+[e = . . _RCSTAbits 0 2 -> -> 0 `i `uc ]
+"34
+[; ;UART.c: 34:     RCSTAbits.OERR = 0;
 [e = . . _RCSTAbits 0 1 -> -> 0 `i `uc ]
-"36
-[; ;UART.c: 36:     TRISCbits.TRISC7 = 1;
-[e = . . _TRISCbits 0 7 -> -> 1 `i `uc ]
 "37
-[; ;UART.c: 37:     TRISCbits.TRISC6 = 0;
-[e = . . _TRISCbits 0 6 -> -> 0 `i `uc ]
+[; ;UART.c: 37:     TRISCbits.TRISC7 = 1;
+[e = . . _TRISCbits 0 7 -> -> 1 `i `uc ]
 "38
-[; ;UART.c: 38: }
+[; ;UART.c: 38:     TRISCbits.TRISC6 = 0;
+[e = . . _TRISCbits 0 6 -> -> 0 `i `uc ]
+"39
+[; ;UART.c: 39: }
 [e :UE 138 ]
 }
-"44
-[; ;UART.c: 44: void UARTSendChar(const char c) {
+"45
+[; ;UART.c: 45: void UARTSendChar(const char c) {
 [v _UARTSendChar `(v ~T0 @X0 1 ef1`Cuc ]
 {
 [e :U _UARTSendChar ]
 [v _c `Cuc ~T0 @X0 1 r1 ]
 [f ]
-"45
-[; ;UART.c: 45:     while (TXSTAbits.TRMT == 0);
+"46
+[; ;UART.c: 46:     while (TXSTAbits.TRMT == 0);
 [e $U 142  ]
 [e :U 143 ]
 [e :U 142 ]
 [e $ == -> . . _TXSTAbits 0 1 `i -> 0 `i 143  ]
 [e :U 144 ]
-"46
-[; ;UART.c: 46:     TXREG = c;
-[e = _TXREG -> _c `uc ]
 "47
-[; ;UART.c: 47: }
+[; ;UART.c: 47:     TXREG = c;
+[e = _TXREG -> _c `uc ]
+"48
+[; ;UART.c: 48: }
 [e :UE 141 ]
 }
-"54
-[; ;UART.c: 54: void UARTSendString(const char* str, const uint8_t max_length) {
+"55
+[; ;UART.c: 55: void UARTSendString(const char* str, const uint8_t max_length) {
 [v _UARTSendString `(v ~T0 @X0 1 ef2`*Cuc`Cuc ]
 {
 [e :U _UARTSendString ]
 [v _str `*Cuc ~T0 @X0 1 r1 ]
 [v _max_length `Cuc ~T0 @X0 1 r2 ]
 [f ]
-"55
-[; ;UART.c: 55:     int i = 0;
+"56
+[; ;UART.c: 56:     int i = 0;
 [v _i `i ~T0 @X0 1 a ]
 [e = _i -> 0 `i ]
-"56
-[; ;UART.c: 56:     for (i = 0; i < max_length && str[i] != '\0'; i++) {
+"57
+[; ;UART.c: 57:     for (i=0 ; i<max_length && str[i]!='\0' ; i++) {
 {
 [e = _i -> 0 `i ]
 [e $U 149  ]
 [e :U 146 ]
 {
-"57
-[; ;UART.c: 57:         UARTSendChar(str[i]);
-[e ( _UARTSendChar (1 *U + _str * -> _i `x -> -> # *U _str `i `x ]
 "58
-[; ;UART.c: 58:     }
+[; ;UART.c: 58:         UARTSendChar(str[i]);
+[e ( _UARTSendChar (1 *U + _str * -> _i `x -> -> # *U _str `i `x ]
+"59
+[; ;UART.c: 59:     }
 }
 [e ++ _i -> 1 `i ]
 [e :U 149 ]
 [e $ && < _i -> _max_length `i != -> *U + _str * -> _i `x -> -> # *U _str `i `x `ui -> 0 `ui 146  ]
 [e :U 147 ]
 }
-"59
-[; ;UART.c: 59: }
+"60
+[; ;UART.c: 60: }
 [e :UE 145 ]
 }
-"65
-[; ;UART.c: 65: uint8_t UARTDataReady() {
+"66
+[; ;UART.c: 66: uint8_t UARTDataReady() {
 [v _UARTDataReady `(uc ~T0 @X0 1 ef ]
 {
 [e :U _UARTDataReady ]
 [f ]
-"66
-[; ;UART.c: 66:     return PIR1bits.RCIF;
+"67
+[; ;UART.c: 67:     return PIR1bits.RCIF;
 [e ) . . _PIR1bits 0 5 ]
 [e $UE 150  ]
-"67
-[; ;UART.c: 67: }
+"68
+[; ;UART.c: 68: }
 [e :UE 150 ]
 }
-"73
-[; ;UART.c: 73: char UARTReadChar() {
+"74
+[; ;UART.c: 74: char UARTReadChar() {
 [v _UARTReadChar `(uc ~T0 @X0 1 ef ]
 {
 [e :U _UARTReadChar ]
 [f ]
-"74
-[; ;UART.c: 74:     while (!UARTDataReady());
+"75
+[; ;UART.c: 75:     while (!UARTDataReady());
 [e $U 152  ]
 [e :U 153 ]
 [e :U 152 ]
 [e $ ! != -> ( _UARTDataReady ..  `i -> 0 `i 153  ]
 [e :U 154 ]
-"75
-[; ;UART.c: 75:     return RCREG;
+"76
+[; ;UART.c: 76:     return RCREG;
 [e ) -> _RCREG `uc ]
 [e $UE 151  ]
-"76
-[; ;UART.c: 76: }
+"77
+[; ;UART.c: 77: }
 [e :UE 151 ]
 }
-"85
-[; ;UART.c: 85: uint8_t UARTReadString(char *buf, uint8_t max_length) {
+"86
+[; ;UART.c: 86: uint8_t UARTReadString(char *buf, uint8_t max_length) {
 [v _UARTReadString `(uc ~T0 @X0 1 ef2`*uc`uc ]
 {
 [e :U _UARTReadString ]
 [v _buf `*uc ~T0 @X0 1 r1 ]
 [v _max_length `uc ~T0 @X0 1 r2 ]
 [f ]
-"86
-[; ;UART.c: 86:     uint8_t i = 0;
+"87
+[; ;UART.c: 87:     uint8_t i = 0;
 [v _i `uc ~T0 @X0 1 a ]
 [e = _i -> -> 0 `i `uc ]
-"87
-[; ;UART.c: 87:     char tmp = 1;
+"88
+[; ;UART.c: 88:     char tmp = 1;
 [v _tmp `uc ~T0 @X0 1 a ]
 [e = _tmp -> -> 1 `i `uc ]
-"88
-[; ;UART.c: 88:     for (i = 0; i < max_length - 1; i++) {
+"89
+[; ;UART.c: 89:     for (i=0 ; i<max_length-1 ; i++) {
 {
 [e = _i -> -> 0 `i `uc ]
 [e $U 159  ]
 [e :U 156 ]
 {
-"89
-[; ;UART.c: 89:         tmp = UARTReadChar();
+"90
+[; ;UART.c: 90:         tmp = UARTReadChar();
 [e = _tmp ( _UARTReadChar ..  ]
-"91
-[; ;UART.c: 91:         if (tmp == '\0' || tmp == '\n' || tmp == '\r') {
+"92
+[; ;UART.c: 92:         if (tmp == '\0' || tmp == '\n' || tmp == '\r') {
 [e $ ! || || == -> _tmp `ui -> 0 `ui == -> _tmp `ui -> 10 `ui == -> _tmp `ui -> 13 `ui 160  ]
 {
-"92
-[; ;UART.c: 92:             break;
-[e $U 157  ]
 "93
-[; ;UART.c: 93:         }
+[; ;UART.c: 93:             break;
+[e $U 157  ]
+"94
+[; ;UART.c: 94:         }
 }
 [e :U 160 ]
-"94
-[; ;UART.c: 94:         buf[i] = tmp;
-[e = *U + _buf * -> _i `ux -> -> # *U _buf `ui `ux _tmp ]
 "95
-[; ;UART.c: 95:     }
+[; ;UART.c: 95:         buf[i] = tmp;
+[e = *U + _buf * -> _i `ux -> -> # *U _buf `ui `ux _tmp ]
+"96
+[; ;UART.c: 96:     }
 }
 [e ++ _i -> -> 1 `i `uc ]
 [e :U 159 ]
 [e $ < -> _i `i - -> _max_length `i -> 1 `i 156  ]
 [e :U 157 ]
 }
-"97
-[; ;UART.c: 97:     buf[i + 1] = '\0';
+"98
+[; ;UART.c: 98:     buf[i+1] = '\0';
 [e = *U + _buf * -> + -> _i `i -> 1 `i `x -> -> # *U _buf `i `x -> -> 0 `ui `uc ]
-"99
-[; ;UART.c: 99:     return i;
+"100
+[; ;UART.c: 100:     return i;
 [e ) _i ]
 [e $UE 155  ]
-"100
-[; ;UART.c: 100: }
+"101
+[; ;UART.c: 101: }
 [e :UE 155 ]
 }

@@ -2673,13 +2673,14 @@ uint8_t UARTReadString(char *buf, uint8_t max_length);
 
 
 
+
 void UARTInit(const uint32_t baud_rate, const uint8_t BRGH) {
 
     if (BRGH == 0) {
-        SPBRG = 4000000 / (64 * baud_rate) - 1;
+        SPBRG = 4000000/(64*baud_rate) - 1;
         TXSTAbits.BRGH = 0;
     } else {
-        SPBRG = 4000000 / (16 * baud_rate) - 1;
+        SPBRG = 4000000/(16*baud_rate) - 1;
         TXSTAbits.BRGH = 1;
     }
 
@@ -2716,7 +2717,7 @@ void UARTSendChar(const char c) {
 
 void UARTSendString(const char* str, const uint8_t max_length) {
     int i = 0;
-    for (i = 0; i < max_length && str[i] != '\0'; i++) {
+    for (i=0 ; i<max_length && str[i]!='\0' ; i++) {
         UARTSendChar(str[i]);
     }
 }
@@ -2737,11 +2738,11 @@ char UARTReadChar() {
     while (!UARTDataReady());
     return RCREG;
 }
-# 85 "UART.c"
+# 86 "UART.c"
 uint8_t UARTReadString(char *buf, uint8_t max_length) {
     uint8_t i = 0;
     char tmp = 1;
-    for (i = 0; i < max_length - 1; i++) {
+    for (i=0 ; i<max_length-1 ; i++) {
         tmp = UARTReadChar();
 
         if (tmp == '\0' || tmp == '\n' || tmp == '\r') {
@@ -2750,7 +2751,7 @@ uint8_t UARTReadString(char *buf, uint8_t max_length) {
         buf[i] = tmp;
     }
 
-    buf[i + 1] = '\0';
+    buf[i+1] = '\0';
 
     return i;
 }

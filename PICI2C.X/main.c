@@ -7,6 +7,8 @@
 //**********************************Librerias***********************************
 #include <xc.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "I2C.h"
 #include "UART.h"
 //******************************************************************************
@@ -18,8 +20,9 @@
 #define Gyro_CONFIG 0x1B
 #define Accel_CONFIG 0x1C
 #define Power_Managment_1 0x6B
-//talves defina el inicio de las direcciones.
-//y el inicio de la comunicacion UART.
+#define Accel_Xout_H 0x3B
+#define MPU_Write 0xD0
+#define MPU_Read 0xD1
 //******************************************************************************
 //***************************Bits de ConFig*************************************
 // CONFIG1
@@ -37,22 +40,22 @@
 #pragma config BOR4V = BOR40V   // Brown-out Reset Selection bit (Brown-out Reset set to 4.0V)
 #pragma config WRT = OFF        // Flash Program Memory Self Write Enable bits (Write protection off)
 //******************************************************************************
+//**************************Prototipos de Funciones*****************************
+void I2C_MPU_Init(void);
+void I2C_Read_MPU(float* data_send);
 //********************************Variable**************************************
-uint16_t Gx;
-uint16_t Gy;
-uint16_t Gz; //recupera los valores del giroscopio.
-uint16_t Px;
-uint16_t Py;
-uint16_t Pz; //recupera los valores de la posicion.
-uint16_t temperature; //recupera el valor de la temperatura
-char* charEjex;
+int valor_original;
+float valor_arreglado;
+int status;
+char* buffer;
 //******************************************************************************
 //***************************Código de Interrupción***************************** 
+
 void __interrupt() isr(void) {
     if (PIR1bits.RCIF) {
         char opcionUART = RCREG;
         switch (opcionUART) {
-//---------------------------Cambios en el PIC----------------------------------            
+                //---------------------------Cambios en el PIC----------------------------------            
             case 'a': //Coloca ambos LEDs en 0
                 PilotoLEDs = 0;
                 break;
@@ -65,66 +68,75 @@ void __interrupt() isr(void) {
             case 'd': //Coloca ambos LEDs en 1
                 PilotoLEDs = 3;
                 break;
-//---------------------------Cambios en Adafruit IO-----------------------------                
-            case 'x': //envia el valor actual de la pos. en el eje x
-                UARTSendChar('s');
-                break;
-                
         }
     }
 }
 //******************************************************************************
+
 void main(void) {
+    __delay_ms(1000);
     //--------------------------Canal Analogico---------------------------------
     ANSEL = 0;
     ANSELH = 0; //Puerto A y B como digitales
     //--------------------------Comunicacion UART-------------------------------
     UARTInit(9600, 1);
-    INTCONbits.GIE = 1;
-    INTCONbits.PEIE = 1;
-    PIE1bits.RCIE = 1;
-    TRISCbits.TRISC6 = 0; //se habilita como salida el TX
-    TRISCbits.TRISC7 = 1; //se habilita como entrada el RX   
     //--------------------------Puerto Entrada/salida---------------------------
     TRISAbits.TRISA0 = 0;
     TRISAbits.TRISA1 = 0; //Ambos pines de las luces piloto se habilitan  
     //-------------------------------Limpieza de puertos------------------------   
     PORTAbits.RA0 = 0;
     PORTAbits.RA1 = 0; //Se limpian los puertos
-    //--------------------------Comunicacion SPI--------------------------------
+    //--------------------------Comunicacion I2C--------------------------------
     I2C_Master_Init();
+    I2C_MPU_Init();
+    //--------------------------Loop principal----------------------------------
+    while (1) {
+        I2C_Start(MPU_Write);
+        while (SSPCON2bits.ACKSTAT);
+        I2C_Master_Write(Accel_Xout_H); //Registro donde se inicia la lectura de valores
+        while (SSPCON2bits.ACKSTAT);
+        I2C_Master_RepeatedStart();
+        I2C_Master_Write(MPU_Read);
+        valor_original = (((int) I2C_Read(0) << 8) | ((I2C_Read(1))));
+        valor_arreglado = ((float) valor_original) * 0.0005982; 
+        buffer = ftoa(valor_arreglado, status);
+        UARTSendString(buffer, 6); //solo 5 cifras se envian
+
+        UARTSendChar('\n');
+    }
+}
+
+void I2C_MPU_Init(void) {
+    //Config del modo de energia y reloj 
+    I2C_Master_Start();
+    I2C_Master_Write(MPU_Write); //Direccion de escritura 0xD0
+    I2C_Master_Write(Power_Managment_1); //Es el para el registro con direccion 0x6B
+    I2C_Master_Write(0x01); //PLL ref en el eje x
+    I2C_Master_Stop();
     //Config de la frecuencia de los datos
     I2C_Master_Start();
-    I2C_Master_Write(0xD0);//Direccion de escritura
+    I2C_Master_Write(MPU_Write); //Direccion de escritura
     I2C_Master_Write(Sample_Rate_Divider); //Es el para el registro con direccion 0x19
     I2C_Master_Write(0x07); //Es el para que los datos tengan una frecuencia de 1KHz
     I2C_Master_Stop();
-    //Config del modo de energia y reloj 
-    I2C_Master_Start();
-    I2C_Master_Write(0xD0);//Direccion de escritura
-    I2C_Master_Write(Power_Managment_1); //Es el para el registro con direccion 0x1A
-    I2C_Master_Write(0x01); //PLL ref en el eje x
-    I2C_Master_Stop();
     //Config general 
     I2C_Master_Start();
-    I2C_Master_Write(0xD0);//Direccion de escritura
+    I2C_Master_Write(MPU_Write); //Direccion de escritura
     I2C_Master_Write(CONFIG_MPU6050); //Es el para el registro con direccion 0x1A
     I2C_Master_Write(0x00); //Input desactivada, maxima ancho de banda para el accel
     I2C_Master_Stop();
     //Config del giroscopio
     I2C_Master_Start();
-    I2C_Master_Write(0xD0);//Direccion de escritura
+    I2C_Master_Write(MPU_Write); //Direccion de escritura
     I2C_Master_Write(Gyro_CONFIG); //Es el para el registro con direccion 0x1B
     I2C_Master_Write(0x00); //Sin pruebas, +-250°/s  
     I2C_Master_Stop();
     //Config del acelerometro
     I2C_Master_Start();
-    I2C_Master_Write(0xD0);//Direccion de escritura
+    I2C_Master_Write(MPU_Write); //Direccion de escritura
     I2C_Master_Write(Accel_CONFIG); //Es el para el registro con direccion 0x1C
     I2C_Master_Write(0x00); //Sin pruebas y escala de +-2g
     I2C_Master_Stop();
-    //--------------------------Loop principal----------------------------------
-    while (1) {
-
-    }
+    return;
 }
+

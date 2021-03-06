@@ -8,8 +8,6 @@
 # 2 "<built-in>" 2
 # 1 "I2C.c" 2
 # 12 "I2C.c"
-# 1 "./I2C.h" 1
-# 18 "./I2C.h"
 # 1 "C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\\pic\\include\\xc.h" 1 3
 # 18 "C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -2490,328 +2488,102 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 # 28 "C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\\pic\\include\\xc.h" 2 3
-# 18 "./I2C.h" 2
-
-
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 1 3
-# 13 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef signed char int8_t;
-
-
-
-
-
-
-typedef signed int int16_t;
-
-
-
-
-
-
-
-typedef __int24 int24_t;
-
-
-
-
-
-
-
-typedef signed long int int32_t;
-# 52 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef unsigned char uint8_t;
-
-
-
-
-
-typedef unsigned int uint16_t;
-
-
-
-
-
-
-typedef __uint24 uint24_t;
-
-
-
-
-
-
-typedef unsigned long int uint32_t;
-# 88 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef signed char int_least8_t;
-
-
-
-
-
-
-
-typedef signed int int_least16_t;
-# 109 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef __int24 int_least24_t;
-# 118 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef signed long int int_least32_t;
-# 136 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef unsigned char uint_least8_t;
-
-
-
-
-
-
-typedef unsigned int uint_least16_t;
-# 154 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef __uint24 uint_least24_t;
-
-
-
-
-
-
-
-typedef unsigned long int uint_least32_t;
-# 181 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef signed char int_fast8_t;
-
-
-
-
-
-
-typedef signed int int_fast16_t;
-# 200 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef __int24 int_fast24_t;
-
-
-
-
-
-
-
-typedef signed long int int_fast32_t;
-# 224 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef unsigned char uint_fast8_t;
-
-
-
-
-
-typedef unsigned int uint_fast16_t;
-# 240 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef __uint24 uint_fast24_t;
-
-
-
-
-
-
-typedef unsigned long int uint_fast32_t;
-# 268 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef int32_t intmax_t;
-# 282 "C:\\Program Files\\Microchip\\xc8\\v2.31\\pic\\include\\c90\\stdint.h" 3
-typedef uint32_t uintmax_t;
-
-
-
-
-
-
-typedef int16_t intptr_t;
-
-
-
-
-typedef uint16_t uintptr_t;
-# 20 "./I2C.h" 2
-
-
-
-
-
-
-
-
-void I2C_Master_Init();
-
-
-
-
-
-
-
-void I2C_Master_Wait(void);
-
-
-
-void I2C_Master_Start(void);
-
-
-
-void I2C_Master_RepeatedStart(void);
-
-
-
-void I2C_Master_Stop(void);
-
-
-
-
-
-void I2C_Master_Write(unsigned d);
-
-
-
-
-unsigned short I2C_Master_Read(unsigned short a);
-
-
-
-void I2C_Slave_Init(uint8_t address);
-
-void I2C_ACK(void);
-void I2C_NACK(void);
-unsigned char I2C_Read_Byte(void);
-unsigned char I2C_Read(unsigned char ACK_NACK);
 # 12 "I2C.c" 2
 
+# 1 "./I2C.h" 1
+# 12 "./I2C.h"
+void I2C_Master_Init();
+void I2C_Master_Wait();
+void I2C_Master_Start();
+void I2C_Start(char add);
+void I2C_Master_RepeatedStart();
+void I2C_Master_Stop();
+void I2C_ACK();
+void I2C_NACK();
+unsigned char I2C_Master_Write(unsigned char data);
+unsigned char I2C_Read_Byte();
+unsigned char I2C_Read(unsigned char);
+# 13 "I2C.c" 2
 
 
 
-void I2C_Master_Init()
-{
-  SSPCON = 0x28;
-  SSPCON2 = 0x00;
-  SSPSTAT = 0x00;
-  SSPADD = ((4000000/4)/10000) - 1;
-  TRISCbits.TRISC3 = 1;
-  TRISCbits.TRISC4 = 1;
+
+void I2C_Master_Init() {
+    SSPCON = 0x28;
+    SSPCON2 = 0x00;
+    SSPSTAT = 0x00;
+    SSPADD = ((4000000 / 4) / 100000) - 1;
+    TRISCbits.TRISC3 = 1;
+    TRISCbits.TRISC4 = 1;
 }
 
-
-
-
-
-
-
-void I2C_Master_Wait()
-{
+void I2C_Master_Wait() {
     while ((SSPSTAT & 0x04) || (SSPCON2 & 0x1F));
 }
 
-
-
-void I2C_Master_Start()
-{
+void I2C_Master_Start() {
     I2C_Master_Wait();
-    SSPCON2bits.SEN = 1;
+    SEN = 1;
 }
-void I2C_Start(char add)
-{
+
+void I2C_Start(char add) {
     I2C_Master_Wait();
     SEN = 1;
     I2C_Master_Write(add);
 }
 
-
-
-void I2C_Master_RepeatedStart()
-{
+void I2C_Master_RepeatedStart() {
     I2C_Master_Wait();
-    SSPCON2bits.RSEN = 1;
+    RSEN = 1;
 }
 
-
-
-void I2C_Master_Stop()
-{
+void I2C_Master_Stop() {
     I2C_Master_Wait();
-    SSPCON2bits.PEN = 1;
+    PEN = 1;
 }
 
-
-
-
-
-void I2C_Master_Write(unsigned d)
-{
-    I2C_Master_Wait();
-    SSPBUF = d;
-}
-
-
-
-
-unsigned short I2C_Master_Read(unsigned short a)
-{
-    unsigned short temp;
-    I2C_Master_Wait();
-    SSPCON2bits.RCEN = 1;
-    I2C_Master_Wait();
-    temp = SSPBUF;
-    I2C_Master_Wait();
-    if(a == 1){
-        SSPCON2bits.ACKDT = 0;
-    }else{
-        SSPCON2bits.ACKDT = 1;
-    }
-    SSPCON2bits.ACKEN = 1;
-    return temp;
-}
-
-
-
-void I2C_Slave_Init(uint8_t address)
-{
-    SSPADD = address;
-    SSPCON = 0x36;
-    SSPSTAT = 0x80;
-    SSPCON2 = 0x01;
-    TRISC3 = 1;
-    TRISC4 = 1;
-    GIE = 1;
-    PEIE = 1;
-    SSPIF = 0;
-    SSPIE = 1;
-}
-
-void I2C_ACK(void)
-{
- ACKDT = 0;
+void I2C_ACK(void) {
+    ACKDT = 0;
     ACKEN = 1;
-    while(ACKEN);
+    while (ACKEN);
 }
-void I2C_NACK(void)
-{
- ACKDT = 1;
- ACKEN = 1;
-    while(ACKEN);
+
+void I2C_NACK(void) {
+    ACKDT = 1;
+    ACKEN = 1;
+    while (ACKEN);
 }
-unsigned char I2C_Read_Byte(void)
-{
+
+unsigned char I2C_Master_Write(unsigned char data) {
+    I2C_Master_Wait();
+    SSPBUF = data;
+    while (!SSPIF);
+    SSPIF = 0;
+    return ACKSTAT;
+}
+
+unsigned char I2C_Read_Byte(void) {
 
     I2C_Master_Wait();
     RCEN = 1;
- while(!SSPIF);
- SSPIF = 0;
+    while (!SSPIF);
+    SSPIF = 0;
     I2C_Master_Wait();
     return SSPBUF;
 }
-unsigned char I2C_Read(unsigned char ACK_NACK)
-{ I2C_Master_Wait();
+
+unsigned char I2C_Read(unsigned char ACK_NACK) {
+    I2C_Master_Wait();
 
     unsigned char Data;
     RCEN = 1;
-    while(!BF);
+    while (!BF);
     Data = SSPBUF;
-    if(ACK_NACK==0)
+    if (ACK_NACK == 0)
         I2C_ACK();
     else
         I2C_NACK();
-    while(!SSPIF);
-    SSPIF=0;
+    while (!SSPIF);
+    SSPIF = 0;
     return Data;
 }

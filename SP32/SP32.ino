@@ -139,11 +139,11 @@ void dataPiloto2(AdafruitIO_Data *data) {
   char* dato =  data->value(); // se obtiene el valor enviado;
   Serial.println(dato);
   if (*dato == '1') {
-    Serial2.print('c'); //encender luz 2
+    Serial2.println('c'); //encender luz 2
     Serial.println('c');
   }
   else {
-    Serial2.print('d'); // apagar luz 2
+    Serial2.println('d'); // apagar luz 2
     Serial.println('d');
   }
   return;

@@ -2889,8 +2889,7 @@ uint8_t UARTReadString(char *buf, uint8_t max_length);
 void I2C_MPU_Init(void);
 void I2C_Read_MPU(float* data_send);
 
-int valor_original;
-float valor_arreglado;
+float valor_arreglado[3];
 int status;
 char* buffer;
 
@@ -2936,18 +2935,21 @@ void main(void) {
     I2C_MPU_Init();
 
     while (1) {
-        I2C_Start(0xD0);
-        while (SSPCON2bits.ACKSTAT);
-        I2C_Master_Write(0x3B);
-        while (SSPCON2bits.ACKSTAT);
-        I2C_Master_RepeatedStart();
-        I2C_Master_Write(0xD1);
-        valor_original = (((int) I2C_Read(0) << 8) | ((I2C_Read(1))));
-        valor_arreglado = ((float) valor_original) * 0.0005982;
-        buffer = ftoa(valor_arreglado, status);
+        I2C_Read_MPU(valor_arreglado);
+        buffer = ftoa(valor_arreglado[0], status);
         UARTSendString(buffer, 6);
 
+        buffer = ftoa(valor_arreglado[1], status);
+        UARTSendString(" ", 10);
+        UARTSendString(buffer, 6);
+
+        buffer = ftoa(valor_arreglado[2], status);
+        UARTSendString(" ", 10);
+        UARTSendString(buffer, 6);
+# 119 "main.c"
         UARTSendChar('\n');
+
+
     }
 }
 
@@ -2983,4 +2985,37 @@ void I2C_MPU_Init(void) {
     I2C_Master_Write(0x00);
     I2C_Master_Stop();
     return;
+}
+
+void I2C_Read_MPU(float* data_send) {
+    char temp[6];
+    int valor_original[3];
+
+    I2C_Start(0xD0);
+    while (SSPCON2bits.ACKSTAT);
+    I2C_Master_Write(0x3B);
+    while (SSPCON2bits.ACKSTAT);
+    I2C_Master_RepeatedStart();
+    I2C_Master_Write(0xD1);
+    for (int Addr = 0; Addr < 5; Addr++) temp[Addr] = I2C_Read(0);
+    temp[5] = I2C_Read(1);
+    I2C_Master_Stop();
+
+    valor_original[0] = ((int) temp[0] << 8) | ((int) temp[1]);
+    valor_original[1] = ((int) temp[2] << 8) | ((int) temp[3]);
+    valor_original[2] = ((int) temp[4] << 8) | ((int) temp[5]);
+
+
+
+
+
+    data_send[0] = ((float) valor_original[0]) * 0.0005982;
+    data_send[1] = ((float) valor_original[1]) * 0.0005982;
+    data_send[2] = ((float) valor_original[2]) * 0.0005982;
+
+
+
+
+    return;
+
 }

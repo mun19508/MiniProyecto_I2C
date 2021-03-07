@@ -44,8 +44,7 @@
 void I2C_MPU_Init(void);
 void I2C_Read_MPU(float* data_send);
 //********************************Variable**************************************
-int valor_original;
-float valor_arreglado;
+float valor_arreglado[3]; 
 int status;
 char* buffer;
 //******************************************************************************
@@ -91,18 +90,35 @@ void main(void) {
     I2C_MPU_Init();
     //--------------------------Loop principal----------------------------------
     while (1) {
-        I2C_Start(MPU_Write);
-        while (SSPCON2bits.ACKSTAT);
-        I2C_Master_Write(Accel_Xout_H); //Registro donde se inicia la lectura de valores
-        while (SSPCON2bits.ACKSTAT);
-        I2C_Master_RepeatedStart();
-        I2C_Master_Write(MPU_Read);
-        valor_original = (((int) I2C_Read(0) << 8) | ((I2C_Read(1))));
-        valor_arreglado = ((float) valor_original) * 0.0005982; 
-        buffer = ftoa(valor_arreglado, status);
+        I2C_Read_MPU(valor_arreglado);
+        buffer = ftoa(valor_arreglado[0], status);
         UARTSendString(buffer, 6); //solo 5 cifras se envian
 
+        buffer = ftoa(valor_arreglado[1], status);
+        UARTSendString(" ", 10);
+        UARTSendString(buffer, 6);
+
+        buffer = ftoa(valor_arreglado[2], status);
+        UARTSendString(" ", 10);
+        UARTSendString(buffer, 6);
+/*
+        buffer = ftoa(datos[3], status);
+        UARTSendString(" ", 10);
+        UARTSendString(buffer, 6);
+
+        buffer = ftoa(datos[4], status);
+        UARTSendString(" ", 10);
+        UARTSendString(buffer, 6);
+        buffer = ftoa(datos[5], status);
+        UARTSendString(" ", 10);
+        UARTSendString(buffer, 6);
+
+        buffer = ftoa(datos[6], status);
+        UARTSendString(" ", 10);
+        UARTSendString(buffer, 6);*/
         UARTSendChar('\n');
+        //------------------------Cambios en Adafruit IO------------------------                
+
     }
 }
 
@@ -140,3 +156,35 @@ void I2C_MPU_Init(void) {
     return;
 }
 
+void I2C_Read_MPU(float* data_send) {
+    char temp[6]; //valores temporales
+    int valor_original[3]; // arreglo donde se van a guardar los datos 
+    
+    I2C_Start(MPU_Write);
+    while (SSPCON2bits.ACKSTAT);
+    I2C_Master_Write(Accel_Xout_H); //Registro donde se inicia la lectura de valores
+    while (SSPCON2bits.ACKSTAT);
+    I2C_Master_RepeatedStart();
+    I2C_Master_Write(MPU_Read);
+    for (int Addr = 0; Addr < 5; Addr++) temp[Addr] = I2C_Read(0);
+    temp[5] = I2C_Read(1);
+    I2C_Master_Stop();
+    
+    valor_original[0] = ((int) temp[0] << 8) | ((int) temp[1]);
+    valor_original[1] = ((int) temp[2] << 8) | ((int) temp[3]);
+    valor_original[2] = ((int) temp[4] << 8) | ((int) temp[5]);
+    /*data_original[3] = ((int) temp[6] << 8) | ((int) temp[7]);
+    data_original[4] = ((int) temp[8] << 8) | ((int) temp[9]);
+    data_original[5] = ((int) temp[10] << 8) | ((int) temp[11]);
+    data_original[6] = ((int) temp[12] << 8) | ((int) temp[13]);*/
+
+    data_send[0] = ((float) valor_original[0]) * 0.0005982; //aceleracion en m/s^2
+    data_send[1] = ((float) valor_original[1]) * 0.0005982; //aceleracion en m/s^2
+    data_send[2] = ((float) valor_original[2]) * 0.0005982; //aceleracion en m/s^2
+    /*data_send[3] = ((float) guardar[3]) / 340 + 36.53;
+    data_send[4] = ((float) guardar[4]) * 0.00763; //grados/s
+    data_send[5] = ((float) guardar[5]) * 0.00763; //grados/s
+    data_send[6] = ((float) guardar[6]) * 0.00763; //grados/s*/
+    return;
+
+}

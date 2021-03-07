@@ -51,7 +51,7 @@ void setup() {
   Serial2.begin(9600);
 
   // wait for serial monitor to open
-  while (! Serial);
+  //while (! Serial);
 
   Serial.print("Connecting to Adafruit IO");
 

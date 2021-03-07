@@ -2870,7 +2870,7 @@ char UARTReadChar();
 
 uint8_t UARTReadString(char *buf, uint8_t max_length);
 # 13 "main.c" 2
-# 29 "main.c"
+# 28 "main.c"
 #pragma config FOSC = INTRC_NOCLKOUT
 #pragma config WDTE = OFF
 #pragma config PWRTE = OFF
@@ -2901,21 +2901,20 @@ void __attribute__((picinterrupt(("")))) isr(void) {
         switch (opcionUART) {
 
             case 'a':
-                PORTA = 0;
+                PORTAbits.RA0 = 1;
                 break;
             case 'b':
-                PORTA = 1;
+                PORTAbits.RA0 = 0;
                 break;
             case 'c':
-                PORTA = 2;
+                PORTAbits.RA1 = 1;
                 break;
             case 'd':
-                PORTA = 3;
+                PORTAbits.RA1 = 0;
                 break;
         }
     }
 }
-
 
 void main(void) {
     _delay((unsigned long)((1000)*(4000000/4000.0)));
@@ -2924,6 +2923,9 @@ void main(void) {
     ANSELH = 0;
 
     UARTInit(9600, 1);
+    INTCONbits.GIE = 1;
+    INTCONbits.PEIE = 1;
+    PIE1bits.RCIE = 1;
 
     TRISAbits.TRISA0 = 0;
     TRISAbits.TRISA1 = 0;
@@ -2936,6 +2938,7 @@ void main(void) {
 
     while (1) {
         I2C_Read_MPU(valor_arreglado);
+
         buffer = ftoa(valor_arreglado[0], status);
         UARTSendString(buffer, 6);
 
@@ -2946,13 +2949,11 @@ void main(void) {
         buffer = ftoa(valor_arreglado[2], status);
         UARTSendString(" ", 10);
         UARTSendString(buffer, 6);
-# 119 "main.c"
-        UARTSendChar('\n');
 
+        UARTSendChar('\n');
 
     }
 }
-
 void I2C_MPU_Init(void) {
 
     I2C_Master_Start();
@@ -2988,6 +2989,8 @@ void I2C_MPU_Init(void) {
 }
 
 void I2C_Read_MPU(float* data_send) {
+
+
     char temp[6];
     int valor_original[3];
 
@@ -3001,21 +3004,13 @@ void I2C_Read_MPU(float* data_send) {
     temp[5] = I2C_Read(1);
     I2C_Master_Stop();
 
+
     valor_original[0] = ((int) temp[0] << 8) | ((int) temp[1]);
     valor_original[1] = ((int) temp[2] << 8) | ((int) temp[3]);
     valor_original[2] = ((int) temp[4] << 8) | ((int) temp[5]);
 
-
-
-
-
     data_send[0] = ((float) valor_original[0]) * 0.0005982;
     data_send[1] = ((float) valor_original[1]) * 0.0005982;
     data_send[2] = ((float) valor_original[2]) * 0.0005982;
-
-
-
-
     return;
-
 }

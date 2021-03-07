@@ -14,7 +14,6 @@
 //******************************************************************************
 //******************************Definiciones************************************
 #define _XTAL_FREQ 4000000
-#define PilotoLEDs PORTA
 #define Sample_Rate_Divider 0x19
 #define CONFIG_MPU6050 0x1A
 #define Gyro_CONFIG 0x1B
@@ -54,24 +53,23 @@ void __interrupt() isr(void) {
     if (PIR1bits.RCIF) {
         char opcionUART = RCREG;
         switch (opcionUART) {
-                //---------------------------Cambios en el PIC----------------------------------            
-            case 'a': //Coloca ambos LEDs en 0
-                PilotoLEDs = 0;
+        //---------------------Cambios en el PIC--------------------------------            
+            case 'a': //Se enciende el LED en RA0 
+                PORTAbits.RA0 = 1;
                 break;
-            case 'b': //Coloca el LED en el pin RA0 en 1 y el pin RA1 en 0  
-                PilotoLEDs = 1;
+            case 'b': //Se apaga el LED en RA0
+                PORTAbits.RA0 = 0;
                 break;
-            case 'c': //Coloca ambos LED pin RA1 en 1 y el pin RA0 en 0
-                PilotoLEDs = 2;
+            case 'c': //Se enciende el LED en RA1 
+                PORTAbits.RA1 = 1;
                 break;
-            case 'd': //Coloca ambos LEDs en 1
-                PilotoLEDs = 3;
+            case 'd': //Se apaga el LED en RA1 
+                PORTAbits.RA1 = 0;
                 break;
         }
     }
 }
 //******************************************************************************
-
 void main(void) {
     __delay_ms(1000);
     //--------------------------Canal Analogico---------------------------------
@@ -79,6 +77,9 @@ void main(void) {
     ANSELH = 0; //Puerto A y B como digitales
     //--------------------------Comunicacion UART-------------------------------
     UARTInit(9600, 1);
+    INTCONbits.GIE = 1;
+    INTCONbits.PEIE = 1;
+    PIE1bits.RCIE = 1;
     //--------------------------Puerto Entrada/salida---------------------------
     TRISAbits.TRISA0 = 0;
     TRISAbits.TRISA1 = 0; //Ambos pines de las luces piloto se habilitan  
@@ -86,42 +87,27 @@ void main(void) {
     PORTAbits.RA0 = 0;
     PORTAbits.RA1 = 0; //Se limpian los puertos
     //--------------------------Comunicacion I2C--------------------------------
-    I2C_Master_Init();
-    I2C_MPU_Init();
+    I2C_Master_Init(); //se configura el pic como maestro
+    I2C_MPU_Init(); //se configura el sensor
     //--------------------------Loop principal----------------------------------
     while (1) {
         I2C_Read_MPU(valor_arreglado);
+        //------------------------Cambios en Adafruit IO------------------------                        
         buffer = ftoa(valor_arreglado[0], status);
-        UARTSendString(buffer, 6); //solo 5 cifras se envian
+        UARTSendString(buffer, 6); //aqui se envia el valor en el eje x
 
         buffer = ftoa(valor_arreglado[1], status);
         UARTSendString(" ", 10);
-        UARTSendString(buffer, 6);
+        UARTSendString(buffer, 6); //aqui se envia el valor en el eje y 
 
         buffer = ftoa(valor_arreglado[2], status);
         UARTSendString(" ", 10);
-        UARTSendString(buffer, 6);
-/*
-        buffer = ftoa(datos[3], status);
-        UARTSendString(" ", 10);
-        UARTSendString(buffer, 6);
-
-        buffer = ftoa(datos[4], status);
-        UARTSendString(" ", 10);
-        UARTSendString(buffer, 6);
-        buffer = ftoa(datos[5], status);
-        UARTSendString(" ", 10);
-        UARTSendString(buffer, 6);
-
-        buffer = ftoa(datos[6], status);
-        UARTSendString(" ", 10);
-        UARTSendString(buffer, 6);*/
+        UARTSendString(buffer, 6); //aqui se envia el valor en el eje z
+        
         UARTSendChar('\n');
-        //------------------------Cambios en Adafruit IO------------------------                
 
     }
 }
-
 void I2C_MPU_Init(void) {
     //Config del modo de energia y reloj 
     I2C_Master_Start();
@@ -157,6 +143,8 @@ void I2C_MPU_Init(void) {
 }
 
 void I2C_Read_MPU(float* data_send) {
+    //En esta funcion solo se recuperan 6 de los 14 registros que tiene el sensor
+    
     char temp[6]; //valores temporales
     int valor_original[3]; // arreglo donde se van a guardar los datos 
     
@@ -170,21 +158,13 @@ void I2C_Read_MPU(float* data_send) {
     temp[5] = I2C_Read(1);
     I2C_Master_Stop();
     
-    valor_original[0] = ((int) temp[0] << 8) | ((int) temp[1]);
-    valor_original[1] = ((int) temp[2] << 8) | ((int) temp[3]);
-    valor_original[2] = ((int) temp[4] << 8) | ((int) temp[5]);
-    /*data_original[3] = ((int) temp[6] << 8) | ((int) temp[7]);
-    data_original[4] = ((int) temp[8] << 8) | ((int) temp[9]);
-    data_original[5] = ((int) temp[10] << 8) | ((int) temp[11]);
-    data_original[6] = ((int) temp[12] << 8) | ((int) temp[13]);*/
-
-    data_send[0] = ((float) valor_original[0]) * 0.0005982; //aceleracion en m/s^2
+    //Registros de la aceleracion 
+    valor_original[0] = ((int) temp[0] << 8) | ((int) temp[1]); //en el eje x
+    valor_original[1] = ((int) temp[2] << 8) | ((int) temp[3]); //en el eje y
+    valor_original[2] = ((int) temp[4] << 8) | ((int) temp[5]); //en el eje z
+    //El valor se arregla para que los valores esten en m/s^2
+    data_send[0] = ((float) valor_original[0]) * 0.0005982; 
     data_send[1] = ((float) valor_original[1]) * 0.0005982; //aceleracion en m/s^2
     data_send[2] = ((float) valor_original[2]) * 0.0005982; //aceleracion en m/s^2
-    /*data_send[3] = ((float) guardar[3]) / 340 + 36.53;
-    data_send[4] = ((float) guardar[4]) * 0.00763; //grados/s
-    data_send[5] = ((float) guardar[5]) * 0.00763; //grados/s
-    data_send[6] = ((float) guardar[6]) * 0.00763; //grados/s*/
     return;
-
 }

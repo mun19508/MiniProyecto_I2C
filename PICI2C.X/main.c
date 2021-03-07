@@ -71,7 +71,7 @@ void __interrupt() isr(void) {
 }
 //******************************************************************************
 void main(void) {
-    __delay_ms(1000);
+    __delay_ms(1000);  //Delay necesario para evitar problemas con la comunicacion
     //--------------------------Canal Analogico---------------------------------
     ANSEL = 0;
     ANSELH = 0; //Puerto A y B como digitales
